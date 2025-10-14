@@ -1,0 +1,1321 @@
+{
+	"info": {
+		"_postman_id": "3ec6d51f-a5ed-446f-81cb-55eae6c2e884",
+		"name": "JiraAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37023422",
+		"_collection_link": "https://vi-test.postman.co/workspace/608ec27b-1737-4103-868d-4fda61e45b9e/collection/37023422-3ec6d51f-a5ed-446f-81cb-55eae6c2e884?action=share&source=collection_link&creator=37023422"
+	},
+	"item": [
+		{
+			"name": "End to end test",
+			"item": [
+				{
+					"name": "createIssue Copy 2",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{apitoken}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "vinoth.mail@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fields\": {\r\n        \"assignee\": {\r\n            \"id\": \"712020:1929ee9b-43cc-4007-bcd7-5b8b7c5bc01d\"\r\n        },\r\n        \"issuetype\": {\r\n            \"id\": \"{{IssueTypeBug}}\"\r\n            },\r\n        \"labels\": [\r\n            \"Json\"\r\n        ],\r\n            \"project\": {\r\n            \"id\": \"{{projectId}}\"\r\n        },\r\n       // \"Sprint\": \"Sprint 1\",\r\n     \r\n        \"description\": {\r\n            \"content\": [\r\n                {\r\n                    \"content\": [\r\n                        {\r\n                            \"text\": \"Test ticket to check API calls using postman.Test ticket to check API calls using postman.Test ticket to check API calls using postman.\",\r\n                            \"type\": \"text\"\r\n                        }\r\n                    ],\r\n                    \"type\": \"paragraph\"\r\n                }\r\n            ],\r\n            \"type\": \"doc\",\r\n            \"version\": 1\r\n        },\r\n        \"reporter\": {\r\n            \"id\": \"{{AccountId}}\"\r\n        },\r\n          \r\n        \"summary\": \"Bug 2 - Postman API testing - Json response testing\"\r\n    },\r\n    \"update\": {}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://vinothmail.atlassian.net/rest/api/3/issue",
+							"protocol": "https",
+							"host": [
+								"vinothmail",
+								"atlassian",
+								"net"
+							],
+							"path": [
+								"rest",
+								"api",
+								"3",
+								"issue"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ProjectID Copy 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const resp = pm.response.json().values;   // array of project objects\r",
+									"console.log(resp);\r",
+									"\r",
+									"// Example: Get ID for a specific project name\r",
+									"let projectNameToFind = \"RDS\";  // replace with the project name you want\r",
+									"let project = resp.find(p => p.name === projectNameToFind);\r",
+									"\r",
+									"if (project) {\r",
+									"    console.log(\"Project ID:\", project.id);\r",
+									"    pm.collectionVariables.set(\"projectId\", project.id);  // store in collection variable if needed\r",
+									"} else {\r",
+									"    console.log(\"Project not found!\");\r",
+									"}\r",
+									"\r",
+									"\r",
+									"\r",
+									"//pm.collectionVariables.set(\"projectID\", pm.response.json().values[1].id);\r",
+									"/*\r",
+									"const resp = pm.response.json().values;\r",
+									"console.log(resp);\r",
+									"let projectDetails = resp.values;\r",
+									"const projectNames = resp.map(project => project.name);\r",
+									"let projectmapid = resp.map(project => project.id);\r",
+									"console.log(projectNames);\r",
+									"console.log(projectmapid);\r",
+									"*/"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{apitoken}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "vinoth.mail@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://vinothmail.atlassian.net/rest/api/3/project/search",
+							"protocol": "https",
+							"host": [
+								"vinothmail",
+								"atlassian",
+								"net"
+							],
+							"path": [
+								"rest",
+								"api",
+								"3",
+								"project",
+								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getIssueType Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response1 = pm.response.json();\r",
+									"console.log(response1);\r",
+									"\r",
+									"\r",
+									"for (i = 0; i < response1.length; i++) {\r",
+									"    if(response1[i].name==='Task'){\r",
+									"        pm.collectionVariables.set(\"IssueTypeTask\", response1[i].id);\r",
+									"    }\r",
+									"    if (response1[i].name === 'Epic') {\r",
+									"        pm.collectionVariables.set(\"IssueTypeEpic\", response1[i].id);\r",
+									"    }\r",
+									"    if (response1[i].name === 'Story') {\r",
+									"        pm.collectionVariables.set(\"IssueTypeStory\", response1[i].id);\r",
+									"    }\r",
+									"    if (response1[i].name === 'Bug') {\r",
+									"        pm.collectionVariables.set(\"IssueTypeBug\", response1[i].id);\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"//variables using map\r",
+									"\r",
+									"const response2 = response1.map((value) => value.name); // Fixed reference to response1\r",
+									"console.log(response2);\r",
+									"pm.collectionVariables.set(\"BugIdfromfolder\", response1[response2.indexOf('Bug')].id);\r",
+									"\r",
+									"/*let task = pm.response.json().find(item => item.name === \"Task\");\r",
+									"pm.collectionVariables.set(\"IssueTypeTask\", task.id);\r",
+									"\r",
+									"let epic = pm.response.json().find(item => item.name === \"Epic\");\r",
+									"pm.collectionVariables.set(\"IssueTypeEpic\", epic.id);\r",
+									"\r",
+									"*/\r",
+									"\r",
+									"\r",
+									"//let subtask = pm.response.json().find(item => item.name === \"Sub-task\");\r",
+									"//pm.collectionVariables.set(\"IssueTypeSubtask\", subtask.id);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{apitoken}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "vinoth.mail@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://vinothmail.atlassian.net/rest/api/3/issuetype/project?projectId=10000",
+							"protocol": "https",
+							"host": [
+								"vinothmail",
+								"atlassian",
+								"net"
+							],
+							"path": [
+								"rest",
+								"api",
+								"3",
+								"issuetype",
+								"project"
+							],
+							"query": [
+								{
+									"key": "projectId",
+									"value": "10000"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "getInstanceinfo",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{apitoken}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "vinoth.mail@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://vinothmail.atlassian.net/rest/api/3/instance/license",
+					"protocol": "https",
+					"host": [
+						"vinothmail",
+						"atlassian",
+						"net"
+					],
+					"path": [
+						"rest",
+						"api",
+						"3",
+						"instance",
+						"license"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getProjectinfo",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log(pm.globals.get(\"base_url\"));\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Check Story avatarId\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"\r",
+							"    // Find the object where name = \"Story\"\r",
+							"    var storyType = jsonData.find(item => item.name === \"Story\");\r",
+							"\r",
+							"    // Assert avatarId\r",
+							"    pm.expect(storyType.avatarId).to.eql(10315);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{apitoken}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "vinoth.mail@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://vinothmail.atlassian.net/rest/api/3/issuetype/project?projectId=10035",
+					"protocol": "https",
+					"host": [
+						"vinothmail",
+						"atlassian",
+						"net"
+					],
+					"path": [
+						"rest",
+						"api",
+						"3",
+						"issuetype",
+						"project"
+					],
+					"query": [
+						{
+							"key": "projectId",
+							"value": "10035"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ProjectID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Max Result is 50\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.maxResults).to.eql(50);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function test(course){\r",
+							"    console.log(`this is a function call with perameter ${course}`);\r",
+							"}\r",
+							"\r",
+							"test('Maths');\r",
+							"test('Physics');\r",
+							"\r",
+							"function addition(x,y){\r",
+							"    //console.log(x+y);\r",
+							"    return x+y;\r",
+							"}\r",
+							"//addition(25,55);\r",
+							"var x=44;\r",
+							"var y=99;\r",
+							"console.log(`The sum of ${x} and ${y} is ${addition(x,y)}`);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{apitoken}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "vinoth.mail@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://vinothmail.atlassian.net/rest/api/3/project/search",
+					"protocol": "https",
+					"host": [
+						"vinothmail",
+						"atlassian",
+						"net"
+					],
+					"path": [
+						"rest",
+						"api",
+						"3",
+						"project",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetProjectFeatures",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function(){\r",
+							"pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Project Id is matching\", function(){\r",
+							"    const resp = pm.response.json();\r",
+							"    pm.expect(resp.features[0].projectId).to.eql(10000);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Localised name is matching\", function(){\r",
+							"    const resp = pm.response.json();\r",
+							"    pm.expect(resp.features[2].localisedName).to.eql(\"Code\");\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Togglelocked is Boolean\", function () {\r",
+							"    const resp = pm.response.json();\r",
+							"    pm.expect(resp.features[0].toggleLocked).to.be.a('boolean');\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{apitoken}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "vinoth.mail@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://vinothmail.atlassian.net/rest/api/3/project/10000/features",
+					"protocol": "https",
+					"host": [
+						"vinothmail",
+						"atlassian",
+						"net"
+					],
+					"path": [
+						"rest",
+						"api",
+						"3",
+						"project",
+						"10000",
+						"features"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ProjectSearch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function test(course){\r",
+							"    console.log(`this is a function call with perameter ${course}`);\r",
+							"}\r",
+							"\r",
+							"test('Maths');\r",
+							"test('Physics');\r",
+							"\r",
+							"function addition(x,y){\r",
+							"    //console.log(x+y);\r",
+							"    return x+y;\r",
+							"}\r",
+							"//addition(25,55);\r",
+							"var x=44;\r",
+							"var y=99;\r",
+							"console.log(`The sum of ${x} and ${y} is ${addition(x,y)}`);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{apitoken}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "vinoth.mail@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://vinothmail.atlassian.net/rest/api/3/user/assignable/multiProjectSearch?projectKeys=TAPI",
+					"protocol": "https",
+					"host": [
+						"vinothmail",
+						"atlassian",
+						"net"
+					],
+					"path": [
+						"rest",
+						"api",
+						"3",
+						"user",
+						"assignable",
+						"multiProjectSearch"
+					],
+					"query": [
+						{
+							"key": "projectKeys",
+							"value": "TAPI"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getUserinProject",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"AccountId\", pm.response.json()[0].accountId);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{apitoken}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "vinoth.mail@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://vinothmail.atlassian.net/rest/api/3/user/assignable/multiProjectSearch?projectKeys=RDS",
+					"protocol": "https",
+					"host": [
+						"vinothmail",
+						"atlassian",
+						"net"
+					],
+					"path": [
+						"rest",
+						"api",
+						"3",
+						"user",
+						"assignable",
+						"multiProjectSearch"
+					],
+					"query": [
+						{
+							"key": "projectKeys",
+							"value": "RDS"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createIssue",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{apitoken}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "vinoth.mail@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fields\": {\r\n        \"assignee\": {\r\n            \"id\": \"712020:1929ee9b-43cc-4007-bcd7-5b8b7c5bc01d\"\r\n        },\r\n        \"issuetype\": {\r\n            \"id\": \"10004\"\r\n        },\r\n        \"labels\": [\r\n            \"apibugs\",\r\n            \"Dbrelated\"\r\n        ],\r\n        \"project\": {\r\n            \"id\": \"10000\"\r\n        },\r\n        \"description\": {\r\n            \"content\": [\r\n                {\r\n                    \"content\": [\r\n                        {\r\n                            \"text\": \"Test ticket to check API calls using postman.Test ticket to check API calls using postman.Test ticket to check API calls using postman.\",\r\n                            \"type\": \"text\"\r\n                        }\r\n                    ],\r\n                    \"type\": \"paragraph\"\r\n                }\r\n            ],\r\n            \"type\": \"doc\",\r\n            \"version\": 1\r\n        },\r\n        \"reporter\": {\r\n            \"id\": \"712020:1929ee9b-43cc-4007-bcd7-5b8b7c5bc01d\"\r\n        },\r\n        \"summary\": \"4 - Postman API testing - creating story using postman api calls\"\r\n    },\r\n    \"update\": {}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://vinothmail.atlassian.net/rest/api/3/issue",
+					"protocol": "https",
+					"host": [
+						"vinothmail",
+						"atlassian",
+						"net"
+					],
+					"path": [
+						"rest",
+						"api",
+						"3",
+						"issue"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ProjectID Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the JSON response\r",
+							"let resp = pm.response.json();\r",
+							"\r",
+							"// Convert project names to an array\r",
+							"let projectNames = resp.values.map(p => p.name);\r",
+							"\r",
+							"// Define the project name you want to find\r",
+							"let targetProject = \"Testapi\";\r",
+							"\r",
+							"// Find the index of the project name\r",
+							"let index = projectNames.indexOf(targetProject);\r",
+							"\r",
+							"// Check if the project exists\r",
+							"if (index !== -1) {\r",
+							"    let projectId = resp.values[index].id;\r",
+							"\r",
+							"    // Store in a collection variable\r",
+							"    pm.collectionVariables.set(\"projectIDz\", projectId);\r",
+							"\r",
+							"    console.log(\"Project ID for \" + targetProject + \" is: \" + projectId);\r",
+							"} else {\r",
+							"    console.log(\"Project name not found: \" + targetProject);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{apitoken}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "vinoth.mail@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://vinothmail.atlassian.net/rest/api/3/project/search",
+					"protocol": "https",
+					"host": [
+						"vinothmail",
+						"atlassian",
+						"net"
+					],
+					"path": [
+						"rest",
+						"api",
+						"3",
+						"project",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getIssueType",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response1 = pm.response.json();\r",
+							"for (i = 0; i < response1.length; i++) {\r",
+							"    if(response1[i].name==='Task'){\r",
+							"        pm.collectionVariables.set(\"IssueTypeTask\", response1[i].id);\r",
+							"    }\r",
+							"    if (response1[i].name === 'Epic') {\r",
+							"        pm.collectionVariables.set(\"IssueTypeEpic\", response1[i].id);\r",
+							"    }\r",
+							"    if (response1[i].name === 'Story') {\r",
+							"        pm.collectionVariables.set(\"IssueTypeStory\", response1[i].id);\r",
+							"    }\r",
+							"    if (response1[i].name === 'Bug') {\r",
+							"        pm.collectionVariables.set(\"IssueTypeBug\", response1[i].id);\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"//variables using map\r",
+							"\r",
+							"const response2 = response1.map((value) => value.name); // Fixed reference to response1\r",
+							"console.log(response2);\r",
+							"pm.collectionVariables.set(\"TaskMapId\", response1[response2.indexOf('Bug')].id);\r",
+							"\r",
+							"/*let task = pm.response.json().find(item => item.name === \"Task\");\r",
+							"pm.collectionVariables.set(\"IssueTypeTask\", task.id);\r",
+							"\r",
+							"let epic = pm.response.json().find(item => item.name === \"Epic\");\r",
+							"pm.collectionVariables.set(\"IssueTypeEpic\", epic.id);\r",
+							"\r",
+							"*/\r",
+							"\r",
+							"\r",
+							"//let subtask = pm.response.json().find(item => item.name === \"Sub-task\");\r",
+							"//pm.collectionVariables.set(\"IssueTypeSubtask\", subtask.id);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{apitoken}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "vinoth.mail@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://vinothmail.atlassian.net/rest/api/3/issuetype/project?projectId=10035",
+					"protocol": "https",
+					"host": [
+						"vinothmail",
+						"atlassian",
+						"net"
+					],
+					"path": [
+						"rest",
+						"api",
+						"3",
+						"issuetype",
+						"project"
+					],
+					"query": [
+						{
+							"key": "projectId",
+							"value": "10035"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getIssueType Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response1 = pm.response.json();\r",
+							"for (i = 0; i < response1.length; i++) {\r",
+							"    if(response1[i].name==='Task'){\r",
+							"        pm.collectionVariables.set(\"IssueTypeTask\", response1[i].id);\r",
+							"    }\r",
+							"    if (response1[i].name === 'Epic') {\r",
+							"        pm.collectionVariables.set(\"IssueTypeEpic\", response1[i].id);\r",
+							"    }\r",
+							"    if (response1[i].name === 'Story') {\r",
+							"        pm.collectionVariables.set(\"IssueTypeStory\", response1[i].id);\r",
+							"    }\r",
+							"    if (response1[i].name === 'Bug') {\r",
+							"        pm.collectionVariables.set(\"IssueTypeBug\", response1[i].id);\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"/*\r",
+							"\r",
+							"//variables using map\r",
+							"\r",
+							"const response2 = response1.map((value) => value.name);\r",
+							"console.log(response2);\r",
+							"\r",
+							"// Check if TaskMapId is defined before accessing its id\r",
+							"//const taskMapId = pm.iterationData.get(\"TaskMapId\");\r",
+							"//if (taskMapId) {\r",
+							"        pm.collectionVariables.set(\"TaskMapId\", response1[response2.indexOf(pm.iterationData.get('TaskMapId'))].id);\r",
+							"/*const response2 = response1.map((value) => value.name); // Fixed reference to response1\r",
+							"console.log(response2);\r",
+							"pm.collectionVariables.set(\"TaskMapId\", response1[response2.indexOf('Bug')].id);\r",
+							"\r",
+							"/*let task = pm.response.json().find(item => item.name === \"Task\");\r",
+							"pm.collectionVariables.set(\"IssueTypeTask\", task.id);\r",
+							"\r",
+							"let epic = pm.response.json().find(item => item.name === \"Epic\");\r",
+							"pm.collectionVariables.set(\"IssueTypeEpic\", epic.id);\r",
+							"\r",
+							"*/\r",
+							"\r",
+							"\r",
+							"//let subtask = pm.response.json().find(item => item.name === \"Sub-task\");\r",
+							"//pm.collectionVariables.set(\"IssueTypeSubtask\", subtask.id);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{apitoken}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "vinoth.mail@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://vinothmail.atlassian.net/rest/api/3/issuetype/project?projectId=10035",
+					"protocol": "https",
+					"host": [
+						"vinothmail",
+						"atlassian",
+						"net"
+					],
+					"path": [
+						"rest",
+						"api",
+						"3",
+						"issuetype",
+						"project"
+					],
+					"query": [
+						{
+							"key": "projectId",
+							"value": "10035"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createIssue Copy",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{apitoken}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "vinoth.mail@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fields\": {\r\n        \"assignee\": {\r\n            \"id\": \"712020:1929ee9b-43cc-4007-bcd7-5b8b7c5bc01d\"\r\n        },\r\n        \"issuetype\": {\r\n            \"id\": \"{{IssueTypeStory}}\"\r\n            },\r\n        \"labels\": [\r\n            \"Json\"\r\n        ],\r\n            \"project\": {\r\n            \"id\": \"{{projectId}}\"\r\n        },\r\n       // \"Sprint\": \"Sprint 1\",\r\n     \r\n        \"description\": {\r\n            \"content\": [\r\n                {\r\n                    \"content\": [\r\n                        {\r\n                            \"text\": \"Test ticket to check API calls using postman.Test ticket to check API calls using postman.Test ticket to check API calls using postman.\",\r\n                            \"type\": \"text\"\r\n                        }\r\n                    ],\r\n                    \"type\": \"paragraph\"\r\n                }\r\n            ],\r\n            \"type\": \"doc\",\r\n            \"version\": 1\r\n        },\r\n        \"reporter\": {\r\n            \"id\": \"{{AccountId}}\"\r\n        },\r\n          \r\n        \"summary\": \"Bug 2 - Postman API testing - Json response testing\"\r\n    },\r\n    \"update\": {}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://vinothmail.atlassian.net/rest/api/3/issue",
+					"protocol": "https",
+					"host": [
+						"vinothmail",
+						"atlassian",
+						"net"
+					],
+					"path": [
+						"rest",
+						"api",
+						"3",
+						"issue"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getIssuedetails",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function test(){\r",
+							"    console.log(\"test function called\");\r",
+							"}\r",
+							"\r",
+							"test();"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{apitoken}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "vinoth.mail@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://vinothmail.atlassian.net/rest/api/3/issue/10039",
+					"protocol": "https",
+					"host": [
+						"vinothmail",
+						"atlassian",
+						"net"
+					],
+					"path": [
+						"rest",
+						"api",
+						"3",
+						"issue",
+						"10039"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse JSON response\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"// Get the issue type name from CSV file\r",
+							"const issueTypeName = pm.iterationData.get('IssueTypeName');\r",
+							"console.log(\"Looking for Issue Type:\", issueTypeName);\r",
+							"\r",
+							"// Find the matching issue type object\r",
+							"const match = response.find(obj => obj.name.toLowerCase() === issueTypeName.toLowerCase());\r",
+							"\r",
+							"// Store result or handle missing match\r",
+							"if (match) {\r",
+							"    pm.collectionVariables.set(issueTypeName + \"_ID\", match.id);\r",
+							"    console.log(`Stored ${issueTypeName}_ID as:`, match.id);\r",
+							"} else {\r",
+							"    console.log(\"❌ No matching issue type found for:\", issueTypeName);\r",
+							"    pm.test(\"Issue Type Found\", function () {\r",
+							"        pm.expect.fail(`No issue type found for ${issueTypeName}`);\r",
+							"    });\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{apitoken}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "vinoth.mail@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://vinothmail.atlassian.net/rest/api/3/issuetype/project?projectId=10000",
+					"protocol": "https",
+					"host": [
+						"vinothmail",
+						"atlassian",
+						"net"
+					],
+					"path": [
+						"rest",
+						"api",
+						"3",
+						"issuetype",
+						"project"
+					],
+					"query": [
+						{
+							"key": "projectId",
+							"value": "10000"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "{{apitoken}}",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "vinoth.mail@gmail.com",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "apitoken",
+			"value": ""
+		},
+		{
+			"key": "projectID",
+			"value": ""
+		},
+		{
+			"key": "IssueTypeTask",
+			"value": ""
+		},
+		{
+			"key": "IssueTypeEpic",
+			"value": ""
+		},
+		{
+			"key": "IssueTypeSubtask",
+			"value": ""
+		},
+		{
+			"key": "AccountId",
+			"value": ""
+		},
+		{
+			"key": "IssueTypeBug",
+			"value": ""
+		},
+		{
+			"key": "IssueTypeStory",
+			"value": ""
+		},
+		{
+			"key": "TaskMapId",
+			"value": ""
+		},
+		{
+			"key": "projectepicnames",
+			"value": ""
+		},
+		{
+			"key": "projectId",
+			"value": ""
+		},
+		{
+			"key": "ProjectMapID",
+			"value": ""
+		},
+		{
+			"key": "ProjID",
+			"value": ""
+		},
+		{
+			"key": "projectIDz",
+			"value": ""
+		},
+		{
+			"key": "BugIdfromfolder",
+			"value": ""
+		},
+		{
+			"key": "Task_ID",
+			"value": ""
+		},
+		{
+			"key": "Bug_ID",
+			"value": ""
+		},
+		{
+			"key": "Story_ID",
+			"value": ""
+		},
+		{
+			"key": "Epic_ID",
+			"value": ""
+		},
+		{
+			"key": "Sub-task_ID",
+			"value": ""
+		}
+	]
+}
